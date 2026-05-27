@@ -4,9 +4,6 @@ metadata:
   name: backend-service
   namespace: fluid-ai
 spec:
-  type: ClusterIP
-  selector:
-    app: backend
-  ports:
+  type: LoadBalancercle
     - port: 5000
       targetPort: 5000

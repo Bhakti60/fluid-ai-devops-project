@@ -7,12 +7,7 @@ pipeline {
         ECR_REPO = 'fluid-ai-backend'
         IMAGE_TAG = "${BUILD_NUMBER}"
         IMAGE_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}"
-    }
-
-    stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'YOUR_GITHUB_REPO_URL'
+    }cleaURL'
             }
         }
 
