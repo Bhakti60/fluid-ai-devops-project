@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'ap-south-1'
+        AWS_ACCOUNT_ID = '842833233822'
+        ECR_REPO = 'fluid-ai-backend'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        IMAGE_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO}:${IMAGE_TAG}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'YOUR_GITHUB_REPO_URL'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                cd app
+                docker build -t $IMAGE_URI .
+                '''
+            }
+        }
+
+        stage('Login to ECR') {
+            steps {
+                sh '''
+                aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
+                '''
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                sh '''
+                docker push $IMAGE_URI
+                '''
+            }
+        }
+
+        stage('Update Kubernetes Manifest') {
+            steps {
+                sh '''
+                sed -i "s|image: .*|image: $IMAGE_URI|g" k8s/backend-deployment.yaml
+                git config user.name "jenkins"
+                git config user.email "jenkins@example.com"
+                git add k8s/backend-deployment.yaml
+                git commit -m "Update backend image to $IMAGE_TAG" || echo "No changes to commit"
+                git push origin main
+                '''
+            }
+        }
+    }
+}
