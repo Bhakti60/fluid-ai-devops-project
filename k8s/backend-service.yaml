@@ -1,9 +1,17 @@
 apiVersion: v1
 kind: Service
+
 metadata:
   name: backend-service
   namespace: fluid-ai
+
 spec:
-  type: LoadBalancercle
+  type: LoadBalancer
+
+  selector:
+    app: backend
+
+  ports:
     - port: 5000
       targetPort: 5000
+      protocol: TCP
