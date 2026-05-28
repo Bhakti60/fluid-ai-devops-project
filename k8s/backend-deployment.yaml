@@ -18,9 +18,9 @@ spec:
       containers:
         - name: backend
 <<<<<<< HEAD
-          image: 842833233822.dkr.ecr.ap-south-1.amazonaws.com/fluid-ai-backend:9
+          image: 842833233822.dkr.ecr.ap-south-1.amazonaws.com/fluid-ai-backend:10
 =======
-          image: 842833233822.dkr.ecr.ap-south-1.amazonaws.com/fluid-ai-backend:1
+          image: 842833233822.dkr.ecr.ap-south-1.amazonaws.com/fluid-ai-backend:10
 >>>>>>> ef41f8a (updated)
           ports:
             - containerPort: 5000
